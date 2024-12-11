@@ -1,9 +1,11 @@
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
  * An Integer Binary Search Tree
- * @author: Your Name Here
- * @version: Date
+ *
+ * @author: Zander Deutch
+ * @version: 12/9/24
  */
 
 public class BST {
@@ -32,67 +34,144 @@ public class BST {
     /**
      * Prints the provided ArrayList of nodes
      * in the form node1-node2-node3
+     *
      * @param nodes ArrayList of BSTNodes
      */
     public static void printNodes(ArrayList<BSTNode> nodes) {
-        for(int i=0; i<nodes.size()-1; i++) {
+        for (int i = 0; i < nodes.size() - 1; i++) {
             System.out.print(nodes.get(i) + "-");
         }
-        System.out.println(nodes.get(nodes.size()-1));
+        System.out.println(nodes.get(nodes.size() - 1));
     }
 
     /**
      * A function that searches for a value in the tree
+     *
      * @param val integer value to search for
      * @return true if val is in the tree, false otherwise
      */
     public boolean search(int val) {
-        // TODO: Complete the search function
-        return false;
+        return searchHelp(root, val);
+    }
+
+    public boolean searchHelp(BSTNode node, int val) {
+        if (node == null) {
+            return false;
+        }
+
+        if (node.getVal() == val) {
+            return true;
+        }
+
+        if (val < node.getVal()) {
+            return searchHelp(node.getLeft(), val);
+        } else {
+            return searchHelp(node.getRight(), val);
+        }
     }
 
     /**
      * @return ArrayList of BSTNodes in inorder
      */
     public ArrayList<BSTNode> getInorder() {
-        // TODO: Complete inorder traversal
-        return null;
+        ArrayList<BSTNode> result = new ArrayList<>();
+        inOrderHelper(root, result);
+        return result;
+    }
+
+    private void inOrderHelper(BSTNode node, ArrayList<BSTNode> result) {
+        if (node != null) {
+            inOrderHelper(node.getLeft(), result);
+            result.add(node);
+            inOrderHelper(node.getRight(), result);
+        }
     }
 
     /**
      * @return ArrayList of BSTNodes in preorder
      */
     public ArrayList<BSTNode> getPreorder() {
-        // TODO: Complete preorder traversal
-        return null;
+        ArrayList<BSTNode> result = new ArrayList<>();
+        preOrderHelper(root, result);
+        return result;
+    }
+
+    private void preOrderHelper(BSTNode node, ArrayList<BSTNode> result) {
+        if (node != null) {
+            result.add(node);
+            preOrderHelper(node.getLeft(), result);
+            preOrderHelper(node.getRight(), result);
+        }
     }
 
     /**
      * @return ArrayList of BSTNodes in postorder
      */
     public ArrayList<BSTNode> getPostorder() {
-        // TODO: Complete postorder traversal
-        return null;
+        ArrayList<BSTNode> result = new ArrayList<>();
+        postOrderHelper(root, result);
+        return result;
     }
+
+    private void postOrderHelper(BSTNode node, ArrayList<BSTNode> result) {
+        if (node != null) {
+            postOrderHelper(node.getLeft(), result);
+            postOrderHelper(node.getRight(), result);
+            result.add(node);
+        }
+    }
+
 
     /**
      * Inserts the given integer value to the tree
      * if it does not already exist. Modifies the
      * root instance variable to be the root of the new modified tree.
+     *
      * @param val The value ot insert
      */
     public void insert(int val) {
-        // TODO: Complete insert
+        insertHelper(root, val);
     }
+
+    private void insertHelper(BSTNode node, int val) {
+        if (val > node.getVal()) {
+            if (node.getRight() == null) {
+                node.setRight(new BSTNode(val));
+            } else {
+                insertHelper(node.getRight(), val);
+            }
+        }
+        if (val < node.getVal()) {
+            if (node.getLeft() == null) {
+                node.setLeft(new BSTNode(val));
+            } else {
+                insertHelper(node.getLeft(), val);
+            }
+        }
+    }
+
 
     /**
      * Determines if the current BST is
      * a valid BST.
+     *
      * @return true if valid false otherwise
      */
     public boolean isValidBST() {
-        // TODO: Optional Challenge!
-        return false;
+        return isBSTHelper(root, Integer.MIN_VALUE, Integer.MAX_VALUE);
+    }
+
+    private boolean isBSTHelper(BSTNode node, int min, int max) {
+        if(node == null) {
+            return true;
+        }
+        if(node.getVal() <= min || node.getVal() >= max) {
+            return false;
+        }
+        return isBSTHelper(node.getLeft(), min, node.getVal()) && isBSTHelper(node.getRight(), node.getVal(), max);
+
+
+
     }
 
     public static void main(String[] args) {
